@@ -116,7 +116,7 @@ export default function App() {
 
   async function fetchCalculate(expr) {
     try {
-      const response = await fetch('/calculate', {
+      const response = await fetch('https://15zi157eh8.execute-api.us-east-1.amazonaws.com/test/CalculatorManager', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ expression: expr }),
