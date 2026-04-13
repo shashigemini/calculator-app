@@ -39,18 +39,19 @@ export const handler = async (event) => {
     
     let expression = '';
     
-    // API Gateway can send the body as a JSON string
-    if (event.body) {
+    let body = event.body;
+    
+    // API Gateway Proxy sends body as a string. Direct Lambda tests might send an object.
+    if (typeof body === 'string') {
         try {
-            const body = JSON.parse(event.body);
-            expression = body.expression;
+            body = JSON.parse(body);
         } catch (e) {
-            expression = event.body.expression || '';
+            console.warn('Could not parse body as JSON:', body);
         }
-    } else {
-        // Direct Lambda invocation or other triggers
-        expression = event.expression || '';
     }
+
+    // Extract expression from body (API/POST) or root event (Direct/GET)
+    expression = body?.expression || event.expression || '';
 
     const result = calculate(expression);
 
